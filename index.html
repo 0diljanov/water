@@ -3,418 +3,503 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#0a2472">
-<title>Оплата воды | Suv to'lovi</title>
+<meta name="theme-color" content="#0a2e5c">
+<title>AQUA118 — Оплата воды</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { height: 100%; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: linear-gradient(180deg, #0a2472 0%, #001233 100%);
-    color: #fff;
+    background:
+      radial-gradient(at 20% 0%, #1a4a8c 0%, transparent 50%),
+      radial-gradient(at 80% 100%, #0d2557 0%, transparent 50%),
+      linear-gradient(180deg, #0a2e5c 0%, #061a3a 100%);
     min-height: 100vh;
+    color: #fff;
+    padding: 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px 16px 40px;
+  }
+  .container { width: 100%; max-width: 440px; }
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .icon-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
   }
   .logo {
-    font-size: 28px;
+    background: #fff;
+    color: #0a2e5c;
+    padding: 8px 16px;
+    border-radius: 12px;
     font-weight: 800;
-    letter-spacing: 1px;
-    margin-top: 10px;
-    margin-bottom: 6px;
-    text-align: center;
+    font-size: 16px;
+    letter-spacing: 0.5px;
   }
-  .logo span { color: #4cc9f0; }
-  .tagline {
-    font-size: 13px;
-    color: #b8c5e8;
-    margin-bottom: 24px;
-    text-align: center;
-  }
+  .logo span { color: #00b9d4; }
+
   .card {
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 18px;
     padding: 22px 20px;
-    width: 100%;
-    max-width: 420px;
     margin-bottom: 16px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
   }
-  .point-label {
-    font-size: 12px;
-    color: #8ea3d6;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin-bottom: 6px;
+  .machine-info { text-align: center; }
+  .machine-model { font-size: 32px; font-weight: 800; letter-spacing: 0.5px; }
+  .machine-loc {
+    margin-top: 8px;
+    color: #b8d0ed;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
   }
-  .point-name {
-    font-size: 24px;
+  .machine-loc::before { content: '📍'; font-size: 14px; }
+
+  .pay-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .pay-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 18px;
+    padding: 24px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.1s, background 0.15s;
+  }
+  .pay-card:active { transform: scale(0.97); background: rgba(255,255,255,0.1); }
+  .pay-logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    margin: 0 auto 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+  }
+  .pay-logo.payme { background: #58d2d2; color: #000; }
+  .pay-logo.click { background: #00bce5; color: #fff; }
+  .pay-logo.uzum  { background: #7f5af0; color: #fff; }
+  .pay-logo.paynet{ background: #00c39a; color: #fff; }
+  .pay-name { font-size: 16px; font-weight: 600; }
+
+  .filter-card { padding: 18px 16px 22px; }
+  .filter-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 16px;
     font-weight: 700;
     margin-bottom: 4px;
   }
-  .point-id {
-    font-size: 13px;
-    color: #b8c5e8;
-    font-family: 'SF Mono', Menlo, monospace;
+  .filter-title::before { content: '🔧'; font-size: 16px; }
+  .filter-sub { text-align: center; color: #8ba6c9; font-size: 12px; margin-bottom: 16px; }
+  .filter-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
   }
-  .price-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 20px 0 6px;
-  }
-  .price-label { font-size: 14px; color: #b8c5e8; }
-  .price-value { font-size: 14px; color: #fff; font-weight: 600; }
-  .liters-control {
+  .filter-cell { text-align: center; }
+  .filter-bar {
+    height: 80px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    background: rgba(0,0,0,0.25);
-    border-radius: 14px;
-    padding: 8px;
-    margin-top: 8px;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 17px;
+    background: linear-gradient(180deg, #00d4a2 0%, #00b388 100%);
+    color: #fff;
   }
-  .liters-btn {
+  .filter-name { font-size: 11px; color: #8ba6c9; margin-bottom: 4px; }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 15, 35, 0.85);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 100;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    width: 100%;
+    max-width: 400px;
+    background: #0d1f44;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 20px;
+  }
+  .modal-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .modal-logo {
     width: 44px;
     height: 44px;
     border-radius: 10px;
-    background: rgba(255,255,255,0.12);
-    border: none;
-    color: #fff;
-    font-size: 22px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
   }
-  .liters-btn:active { background: rgba(255,255,255,0.25); }
-  .liters-input {
-    background: transparent;
+  .modal-title { font-size: 17px; font-weight: 700; }
+  .modal-sub { font-size: 12px; color: #8ba6c9; }
+  .modal-close {
+    margin-left: auto;
+    background: rgba(255,255,255,0.08);
     border: none;
     color: #fff;
-    font-size: 22px;
-    font-weight: 700;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  .amount-input-wrap {
+    border: 2px solid #00c39a;
+    border-radius: 14px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .amount-input {
+    flex: 1;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 26px;
+    font-weight: 800;
     text-align: center;
-    width: 80px;
     outline: none;
+    width: 100%;
     -moz-appearance: textfield;
   }
-  .liters-input::-webkit-outer-spin-button,
-  .liters-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-  .liters-unit { color: #b8c5e8; font-size: 14px; margin-right: 8px; }
-  .total {
-    text-align: center;
-    padding: 16px;
-    background: rgba(76, 201, 240, 0.12);
-    border: 1px solid rgba(76, 201, 240, 0.25);
-    border-radius: 14px;
-    margin-top: 16px;
-  }
-  .total-label { font-size: 12px; color: #8ea3d6; text-transform: uppercase; letter-spacing: 1px; }
-  .total-amount {
-    font-size: 36px;
-    font-weight: 800;
-    color: #4cc9f0;
-    margin-top: 4px;
-  }
-  .total-amount small { font-size: 16px; color: #b8c5e8; font-weight: 500; }
-  .card-info {
-    margin-top: 16px;
-    padding: 14px;
-    background: rgba(0,0,0,0.25);
+  .amount-input::-webkit-outer-spin-button,
+  .amount-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .amount-currency { color: #8ba6c9; font-weight: 600; margin-left: 6px; }
+  .liters-pill {
+    background: rgba(0, 195, 154, 0.1);
+    border: 1px solid rgba(0, 195, 154, 0.25);
     border-radius: 12px;
+    padding: 14px 18px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
-  }
-  .card-info-left { flex: 1; min-width: 0; }
-  .card-info-label { font-size: 11px; color: #8ea3d6; text-transform: uppercase; letter-spacing: 1px; }
-  .card-info-number {
-    font-size: 17px;
-    font-weight: 600;
-    font-family: 'SF Mono', Menlo, monospace;
-    letter-spacing: 1px;
-    margin-top: 2px;
-  }
-  .copy-btn {
-    background: rgba(76, 201, 240, 0.2);
-    border: 1px solid rgba(76, 201, 240, 0.4);
-    color: #4cc9f0;
-    padding: 8px 14px;
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.15s;
-  }
-  .copy-btn:active { transform: scale(0.95); }
-  .copy-btn.copied {
-    background: #4cc9f0;
-    color: #001233;
-  }
-  .pay-buttons {
-    width: 100%;
-    max-width: 420px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 8px;
-  }
-  .pay-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    padding: 18px;
-    border-radius: 16px;
-    border: none;
-    font-size: 17px;
-    font-weight: 700;
-    cursor: pointer;
-    text-decoration: none;
-    color: #fff;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    transition: transform 0.1s;
-  }
-  .pay-btn:active { transform: scale(0.98); }
-  .pay-btn-payme {
-    background: linear-gradient(135deg, #00d09a 0%, #00b386 100%);
-  }
-  .pay-btn-click {
-    background: linear-gradient(135deg, #00b9f1 0%, #0099d4 100%);
-  }
-  .pay-btn-logo {
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 900;
+    margin-bottom: 12px;
     font-size: 14px;
   }
-  .pay-btn-payme .pay-btn-logo { color: #00b386; }
-  .pay-btn-click .pay-btn-logo { color: #0099d4; }
-  .footer-note {
-    margin-top: 24px;
-    font-size: 12px;
-    color: #8ea3d6;
-    text-align: center;
-    line-height: 1.6;
-    max-width: 420px;
+  .liters-pill-left { display: flex; align-items: center; gap: 6px; color: #00d4a2; }
+  .liters-pill-right { font-weight: 700; }
+  .liters-pill-right span { font-size: 22px; }
+  .quick-amounts {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
   }
+  .quick-btn {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    padding: 12px 0;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .quick-btn:active { background: rgba(255,255,255,0.18); }
+  .price-line { text-align: center; color: #8ba6c9; font-size: 13px; margin-bottom: 16px; }
+  .pay-submit {
+    width: 100%;
+    background: linear-gradient(135deg, #00d4a2 0%, #00b9d4 100%);
+    color: #fff;
+    border: none;
+    padding: 16px;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .pay-submit:active { transform: scale(0.98); }
+  .pay-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+
   .toast {
     position: fixed;
     bottom: 30px;
     left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: #4cc9f0;
-    color: #001233;
-    padding: 14px 24px;
+    transform: translateX(-50%) translateY(120px);
+    background: #ff4d4d;
+    color: #fff;
+    padding: 12px 20px;
     border-radius: 12px;
     font-weight: 600;
-    font-size: 14px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    transition: transform 0.3s ease;
+    font-size: 13px;
     z-index: 1000;
-    pointer-events: none;
+    transition: transform 0.3s ease;
   }
   .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.ok { background: #00b388; }
 </style>
 </head>
 <body>
-  <div class="logo">AQUA<span>118</span></div>
-  <div class="tagline">Чистая вода у вашего дома</div>
+<div class="container">
+  <div class="header">
+    <button class="icon-btn">🔍</button>
+    <div class="logo">AQUA<span>118</span></div>
+    <button class="icon-btn">☰</button>
+  </div>
 
-  <div class="card">
-    <div class="point-label">Точка водомата</div>
-    <div class="point-name" id="point-name">—</div>
-    <div class="point-id" id="point-id">ID: —</div>
+  <div class="card machine-info">
+    <div class="machine-model" id="machine-model">—</div>
+    <div class="machine-loc" id="machine-loc">Загрузка...</div>
+  </div>
 
-    <div class="price-row">
-      <span class="price-label">Цена за литр</span>
-      <span class="price-value">500 сум</span>
+  <div class="pay-grid">
+    <div class="pay-card" data-method="click">
+      <div class="pay-logo click">click</div>
+      <div class="pay-name">Click</div>
     </div>
+    <div class="pay-card" data-method="uzum">
+      <div class="pay-logo uzum">U</div>
+      <div class="pay-name">Uzum</div>
+    </div>
+    <div class="pay-card" data-method="payme">
+      <div class="pay-logo payme">payme</div>
+      <div class="pay-name">Payme</div>
+    </div>
+    <div class="pay-card" data-method="paynet">
+      <div class="pay-logo paynet">paynet</div>
+      <div class="pay-name">Paynet</div>
+    </div>
+  </div>
 
-    <div class="liters-control">
-      <button class="liters-btn" id="minus-btn">−</button>
-      <div style="display:flex;align-items:baseline;">
-        <input type="number" class="liters-input" id="liters" value="10" min="1" max="999" inputmode="numeric">
-        <span class="liters-unit">л</span>
+  <div class="card filter-card">
+    <div class="filter-title">Остаток ресурса фильтров</div>
+    <div class="filter-sub">Последняя замена: <span id="filter-date">—</span></div>
+    <div class="filter-row" id="filter-row-1"></div>
+    <div class="filter-row" id="filter-row-2"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-logo" id="modal-logo">P</div>
+      <div>
+        <div class="modal-title" id="modal-title">Payme</div>
+        <div class="modal-sub">Разовая оплата</div>
       </div>
-      <button class="liters-btn" id="plus-btn">+</button>
+      <button class="modal-close" id="modal-close">×</button>
     </div>
-
-    <div class="total">
-      <div class="total-label">К оплате</div>
-      <div class="total-amount"><span id="total">5 000</span> <small>сум</small></div>
+    <div class="amount-input-wrap">
+      <input type="number" class="amount-input" id="amount" placeholder="0" inputmode="numeric">
+      <span class="amount-currency">UZS</span>
     </div>
-
-    <div class="card-info">
-      <div class="card-info-left">
-        <div class="card-info-label">Номер карты получателя</div>
-        <div class="card-info-number" id="card-number">1234 1234 1234 1234</div>
-      </div>
-      <button class="copy-btn" id="copy-btn">Копировать</button>
+    <div class="liters-pill" id="liters-pill" style="display:none;">
+      <div class="liters-pill-left">💧 Вы получите:</div>
+      <div class="liters-pill-right"><span id="liters">0</span> литров</div>
     </div>
+    <div class="quick-amounts">
+      <button class="quick-btn" data-add="2000">+2K</button>
+      <button class="quick-btn" data-add="3000">+3K</button>
+      <button class="quick-btn" data-add="6000">+6K</button>
+      <button class="quick-btn" data-add="12000">+12K</button>
+    </div>
+    <div class="price-line">Цена: <span id="price-per-liter">500</span> UZS / литр</div>
+    <button class="pay-submit" id="pay-submit" disabled>Оплатить →</button>
   </div>
+</div>
 
-  <div class="pay-buttons">
-    <button class="pay-btn pay-btn-payme" id="payme-btn">
-      <span class="pay-btn-logo">P</span>
-      <span>Оплатить через Payme</span>
-    </button>
-    <button class="pay-btn pay-btn-click" id="click-btn">
-      <span class="pay-btn-logo">C</span>
-      <span>Оплатить через Click</span>
-    </button>
-  </div>
+<div class="toast" id="toast"></div>
 
-  <div class="footer-note">
-    Нажмите кнопку оплаты — номер карты и сумма будут автоматически скопированы в буфер обмена.<br>
-    В приложении выберите «Перевод на карту» и вставьте номер.
-  </div>
-
-  <div class="toast" id="toast">Скопировано в буфер обмена</div>
-
-<script src="locations.js"></script>
+<script src="config.js"></script>
+<script src="machines.js"></script>
 <script>
-  // ============ CONFIGURATION ============
-  const CARD_NUMBER = "1234123412341234";       // ⚠️ Replace with your real card
-  const PRICE_PER_LITER = 500;                  // сум
-  const PAYME_MERCHANT_ID = "";                 // Optional: your Payme merchant id (paycom.uz)
-  // =======================================
+(function() {
+  // ── Read IMEI from URL ──────────────────────────────────────
+  const params = new URLSearchParams(location.search);
+  // Accept ?imei=… (preferred) or ?id=… for backward compatibility
+  const imei = (params.get('imei') || params.get('id') || '').toString();
+  const machine = (window.MACHINES && window.MACHINES[imei]) || null;
 
-  // Locations map (P001 -> name). Edit to add full list.
-  const LOCATIONS = window.LOCATIONS || {};
+  // ── Render machine info ────────────────────────────────────
+  document.getElementById('machine-model').textContent =
+    machine ? machine.model : 'Водомат не найден';
+  document.getElementById('machine-loc').textContent =
+    machine ? machine.location : 'Проверьте корректность QR кода';
+  document.getElementById('filter-date').textContent =
+    machine ? machine.filterDate : '—';
 
-  // Read ID from URL
-  const params = new URLSearchParams(window.location.search);
-  const pointId = (params.get("id") || "P001").toUpperCase();
-  const pointName = LOCATIONS[pointId] || ("Точка " + pointId.replace(/^P/, ""));
+  // ── Filters (8 of them, status from machine) ───────────────
+  const FILTER_DEFS = [
+    ['RO Мембрана', 100], ['Минерализатор', 100], ['Биокерамика', 100], ['Уголь гранул.', 99],
+    ['Механика', 99], ['Полипропилен', 99], ['Пост-карбон', 100], ['УФ Лампа', 99],
+  ];
+  const fr1 = document.getElementById('filter-row-1');
+  const fr2 = document.getElementById('filter-row-2');
+  FILTER_DEFS.forEach(([name, pct], i) => {
+    const cell = document.createElement('div');
+    cell.className = 'filter-cell';
+    cell.innerHTML = `<div class="filter-name">${name}</div><div class="filter-bar">${pct}%</div>`;
+    (i < 4 ? fr1 : fr2).appendChild(cell);
+  });
 
-  document.getElementById("point-name").textContent = pointName;
-  document.getElementById("point-id").textContent = "ID: " + pointId;
+  // ── Modal logic ────────────────────────────────────────────
+  const modal = document.getElementById('modal');
+  const modalLogo = document.getElementById('modal-logo');
+  const modalTitle = document.getElementById('modal-title');
+  const amountInput = document.getElementById('amount');
+  const litersEl = document.getElementById('liters');
+  const litersPill = document.getElementById('liters-pill');
+  const submitBtn = document.getElementById('pay-submit');
+  const priceEl = document.getElementById('price-per-liter');
+  priceEl.textContent = (window.CONFIG && window.CONFIG.pricePerLiter) || 500;
 
-  // Format card with spaces
-  document.getElementById("card-number").textContent =
-    CARD_NUMBER.replace(/(.{4})/g, "$1 ").trim();
+  let currentMethod = 'payme';
 
-  // Liters controls
-  const litersInput = document.getElementById("liters");
-  const totalEl = document.getElementById("total");
-  function updateTotal() {
-    let n = parseInt(litersInput.value, 10);
-    if (!Number.isFinite(n) || n < 1) n = 1;
-    if (n > 999) n = 999;
-    litersInput.value = n;
-    totalEl.textContent = (n * PRICE_PER_LITER).toLocaleString("ru-RU");
+  const METHOD_STYLES = {
+    payme:  { bg: '#58d2d2', color: '#000', name: 'Payme',  logo: 'payme' },
+    click:  { bg: '#00bce5', color: '#fff', name: 'Click',  logo: 'click' },
+    uzum:   { bg: '#7f5af0', color: '#fff', name: 'Uzum',   logo: 'U' },
+    paynet: { bg: '#00c39a', color: '#fff', name: 'Paynet', logo: 'paynet' },
+  };
+
+  function openModal(method) {
+    if (!machine) { showToast('Водомат не найден. Проверьте QR код.'); return; }
+    currentMethod = method;
+    const s = METHOD_STYLES[method];
+    modalLogo.style.background = s.bg;
+    modalLogo.style.color = s.color;
+    modalLogo.textContent = s.logo;
+    modalTitle.textContent = s.name;
+    amountInput.value = '';
+    updateAmount();
+    modal.classList.add('show');
+    setTimeout(() => amountInput.focus(), 100);
   }
-  document.getElementById("minus-btn").addEventListener("click", () => {
-    litersInput.value = Math.max(1, parseInt(litersInput.value, 10) - 1);
-    updateTotal();
-  });
-  document.getElementById("plus-btn").addEventListener("click", () => {
-    litersInput.value = Math.min(999, parseInt(litersInput.value, 10) + 1);
-    updateTotal();
-  });
-  litersInput.addEventListener("input", updateTotal);
-  updateTotal();
+  function closeModal() { modal.classList.remove('show'); }
 
-  // Toast
-  const toast = document.getElementById("toast");
+  document.querySelectorAll('.pay-card').forEach(card => {
+    card.addEventListener('click', () => openModal(card.dataset.method));
+  });
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+
+  function updateAmount() {
+    const amt = parseInt(amountInput.value, 10) || 0;
+    const price = (window.CONFIG && window.CONFIG.pricePerLiter) || 500;
+    const liters = amt > 0 ? (amt / price) : 0;
+    litersEl.textContent = liters.toFixed(2);
+    litersPill.style.display = amt > 0 ? 'flex' : 'none';
+    submitBtn.disabled = amt < 1000; // min 1000 sum
+  }
+  amountInput.addEventListener('input', updateAmount);
+
+  document.querySelectorAll('.quick-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const add = parseInt(btn.dataset.add, 10);
+      amountInput.value = (parseInt(amountInput.value, 10) || 0) + add;
+      updateAmount();
+    });
+  });
+
+  // ── Toast ─────────────────────────────────────────────────
+  const toast = document.getElementById('toast');
   let toastTimer = null;
-  function showToast(msg) {
+  function showToast(msg, ok=false) {
     toast.textContent = msg;
-    toast.classList.add("show");
+    toast.classList.toggle('ok', ok);
+    toast.classList.add('show');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove("show"), 2500);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
   }
 
-  // Clipboard
-  async function copyToClipboard(text) {
+  // ── Payment submission ────────────────────────────────────
+  // The frontend POSTs to backend, backend creates Payme/Click invoice
+  // and returns the checkout URL.  Frontend then redirects there.
+  submitBtn.addEventListener('click', async () => {
+    const amount = parseInt(amountInput.value, 10);
+    if (!amount || amount < 1000) { showToast('Минимум 1000 сум'); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Создаём счёт...';
+
     try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text);
-        return true;
+      const apiBase = (window.CONFIG && window.CONFIG.apiBase) || '';
+      if (!apiBase) {
+        // No backend configured — show demo modal explaining what would happen
+        showDemoMode(amount);
+        return;
       }
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      ta.style.position = "fixed";
-      ta.style.opacity = "0";
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-      return true;
-    } catch (e) { return false; }
-  }
-
-  // Copy card button
-  const copyBtn = document.getElementById("copy-btn");
-  copyBtn.addEventListener("click", async () => {
-    const ok = await copyToClipboard(CARD_NUMBER);
-    if (ok) {
-      copyBtn.classList.add("copied");
-      copyBtn.textContent = "✓ Скопировано";
-      showToast("Номер карты скопирован");
-      setTimeout(() => {
-        copyBtn.classList.remove("copied");
-        copyBtn.textContent = "Копировать";
-      }, 2000);
+      const res = await fetch(apiBase + '/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          imei: imei,
+          amount: amount,           // in UZS, not tiyin
+          method: currentMethod,
+          back: location.href
+        })
+      });
+      if (!res.ok) throw new Error('Сервер не ответил (' + res.status + ')');
+      const data = await res.json();
+      if (!data.url) throw new Error('Сервер не вернул URL');
+      window.location.href = data.url;          // redirect to Payme / Click
+    } catch (err) {
+      showToast('Ошибка: ' + err.message);
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Оплатить →';
     }
   });
 
-  // Open app helper: try app scheme; fall back to universal link.
-  function openApp(scheme, fallback) {
-    const start = Date.now();
-    // Try scheme
-    const a = document.createElement("a");
-    a.href = scheme;
-    a.style.display = "none";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    // After short delay, if still here, navigate to fallback
-    setTimeout(() => {
-      if (Date.now() - start < 1800 && document.visibilityState === "visible") {
-        window.location.href = fallback;
-      }
-    }, 800);
+  function showDemoMode(amount) {
+    const price = (window.CONFIG && window.CONFIG.pricePerLiter) || 500;
+    const liters = (amount / price).toFixed(2);
+    const m = currentMethod.toUpperCase();
+    alert(
+      `🟡 ДЕМО-РЕЖИМ\n\n` +
+      `Backend не настроен (отсутствует apiBase в config.js).\n\n` +
+      `Когда вы подключите Payme/Click merchant, нажатие "Оплатить"\n` +
+      `создаст счёт в ${m} на сумму ${amount} UZS и откроет окно оплаты.\n\n` +
+      `После оплаты сервер пошлёт MQTT команду водомату ${imei}\n` +
+      `налить ${liters} литров.`
+    );
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Оплатить →';
   }
-
-  // Track payment (sent as part of universal link / referrer)
-  function trackUrl(target) {
-    const sep = target.includes("?") ? "&" : "?";
-    return target + sep + "point=" + encodeURIComponent(pointId);
-  }
-
-  // Payme button
-  document.getElementById("payme-btn").addEventListener("click", async () => {
-    await copyToClipboard(CARD_NUMBER);
-    showToast("Карта скопирована — вставьте в Payme");
-    // Payme deep link: open the app's transfer-to-card section
-    const scheme = "payme://transfer?card=" + CARD_NUMBER + "&amount=" + (parseInt(litersInput.value, 10) * PRICE_PER_LITER * 100);
-    const fallback = trackUrl("https://payme.uz/");
-    setTimeout(() => openApp(scheme, fallback), 250);
-  });
-
-  // Click button
-  document.getElementById("click-btn").addEventListener("click", async () => {
-    await copyToClipboard(CARD_NUMBER);
-    showToast("Карта скопирована — вставьте в Click");
-    // Click deep link
-    const scheme = "click://transfer?card=" + CARD_NUMBER + "&amount=" + (parseInt(litersInput.value, 10) * PRICE_PER_LITER);
-    const fallback = trackUrl("https://my.click.uz/");
-    setTimeout(() => openApp(scheme, fallback), 250);
-  });
+})();
 </script>
 </body>
 </html>
