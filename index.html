@@ -488,14 +488,7 @@
     const price = (window.CONFIG && window.CONFIG.pricePerLiter) || 500;
     const liters = (amount / price).toFixed(2);
     const m = currentMethod.toUpperCase();
-    alert(
-      `🟡 ДЕМО-РЕЖИМ\n\n` +
-      `Backend не настроен (отсутствует apiBase в config.js).\n\n` +
-      `Когда вы подключите Payme/Click merchant, нажатие "Оплатить"\n` +
-      `создаст счёт в ${m} на сумму ${amount} UZS и откроет окно оплаты.\n\n` +
-      `После оплаты сервер пошлёт MQTT команду водомату ${imei}\n` +
-      `налить ${liters} литров.`
-    );
+    showToast(`Демо: ${amount} UZS → ${liters} л через ${m}. Backend не настроен.`, true);
     submitBtn.disabled = false;
     submitBtn.textContent = 'Оплатить →';
   }
