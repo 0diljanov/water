@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a2472">
+<title>Оплата воды | Suv to'lovi</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(180deg, #0a2472 0%, #001233 100%);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 16px 40px;
+  }
+  .logo {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-top: 10px;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+  .logo span { color: #4cc9f0; }
+  .tagline {
+    font-size: 13px;
+    color: #b8c5e8;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .card {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 22px 20px;
+    width: 100%;
+    max-width: 420px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .point-label {
+    font-size: 12px;
+    color: #8ea3d6;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+  }
+  .point-name {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .point-id {
+    font-size: 13px;
+    color: #b8c5e8;
+    font-family: 'SF Mono', Menlo, monospace;
+  }
+  .price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0 6px;
+  }
+  .price-label { font-size: 14px; color: #b8c5e8; }
+  .price-value { font-size: 14px; color: #fff; font-weight: 600; }
+  .liters-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0,0,0,0.25);
+    border-radius: 14px;
+    padding: 8px;
+    margin-top: 8px;
+  }
+  .liters-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.12);
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .liters-btn:active { background: rgba(255,255,255,0.25); }
+  .liters-input {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    width: 80px;
+    outline: none;
+    -moz-appearance: textfield;
+  }
+  .liters-input::-webkit-outer-spin-button,
+  .liters-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .liters-unit { color: #b8c5e8; font-size: 14px; margin-right: 8px; }
+  .total {
+    text-align: center;
+    padding: 16px;
+    background: rgba(76, 201, 240, 0.12);
+    border: 1px solid rgba(76, 201, 240, 0.25);
+    border-radius: 14px;
+    margin-top: 16px;
+  }
+  .total-label { font-size: 12px; color: #8ea3d6; text-transform: uppercase; letter-spacing: 1px; }
+  .total-amount {
+    font-size: 36px;
+    font-weight: 800;
+    color: #4cc9f0;
+    margin-top: 4px;
+  }
+  .total-amount small { font-size: 16px; color: #b8c5e8; font-weight: 500; }
+  .card-info {
+    margin-top: 16px;
+    padding: 14px;
+    background: rgba(0,0,0,0.25);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .card-info-left { flex: 1; min-width: 0; }
+  .card-info-label { font-size: 11px; color: #8ea3d6; text-transform: uppercase; letter-spacing: 1px; }
+  .card-info-number {
+    font-size: 17px;
+    font-weight: 600;
+    font-family: 'SF Mono', Menlo, monospace;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+  .copy-btn {
+    background: rgba(76, 201, 240, 0.2);
+    border: 1px solid rgba(76, 201, 240, 0.4);
+    color: #4cc9f0;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .copy-btn:active { transform: scale(0.95); }
+  .copy-btn.copied {
+    background: #4cc9f0;
+    color: #001233;
+  }
+  .pay-buttons {
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .pay-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 18px;
+    border-radius: 16px;
+    border: none;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    transition: transform 0.1s;
+  }
+  .pay-btn:active { transform: scale(0.98); }
+  .pay-btn-payme {
+    background: linear-gradient(135deg, #00d09a 0%, #00b386 100%);
+  }
+  .pay-btn-click {
+    background: linear-gradient(135deg, #00b9f1 0%, #0099d4 100%);
+  }
+  .pay-btn-logo {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 14px;
+  }
+  .pay-btn-payme .pay-btn-logo { color: #00b386; }
+  .pay-btn-click .pay-btn-logo { color: #0099d4; }
+  .footer-note {
+    margin-top: 24px;
+    font-size: 12px;
+    color: #8ea3d6;
+    text-align: center;
+    line-height: 1.6;
+    max-width: 420px;
+  }
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #4cc9f0;
+    color: #001233;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+  <div class="logo">AQUA<span>118</span></div>
+  <div class="tagline">Чистая вода у вашего дома</div>
+
+  <div class="card">
+    <div class="point-label">Точка водомата</div>
+    <div class="point-name" id="point-name">—</div>
+    <div class="point-id" id="point-id">ID: —</div>
+
+    <div class="price-row">
+      <span class="price-label">Цена за литр</span>
+      <span class="price-value">500 сум</span>
+    </div>
+
+    <div class="liters-control">
+      <button class="liters-btn" id="minus-btn">−</button>
+      <div style="display:flex;align-items:baseline;">
+        <input type="number" class="liters-input" id="liters" value="10" min="1" max="999" inputmode="numeric">
+        <span class="liters-unit">л</span>
+      </div>
+      <button class="liters-btn" id="plus-btn">+</button>
+    </div>
+
+    <div class="total">
+      <div class="total-label">К оплате</div>
+      <div class="total-amount"><span id="total">5 000</span> <small>сум</small></div>
+    </div>
+
+    <div class="card-info">
+      <div class="card-info-left">
+        <div class="card-info-label">Номер карты получателя</div>
+        <div class="card-info-number" id="card-number">1234 1234 1234 1234</div>
+      </div>
+      <button class="copy-btn" id="copy-btn">Копировать</button>
+    </div>
+  </div>
+
+  <div class="pay-buttons">
+    <button class="pay-btn pay-btn-payme" id="payme-btn">
+      <span class="pay-btn-logo">P</span>
+      <span>Оплатить через Payme</span>
+    </button>
+    <button class="pay-btn pay-btn-click" id="click-btn">
+      <span class="pay-btn-logo">C</span>
+      <span>Оплатить через Click</span>
+    </button>
+  </div>
+
+  <div class="footer-note">
+    Нажмите кнопку оплаты — номер карты и сумма будут автоматически скопированы в буфер обмена.<br>
+    В приложении выберите «Перевод на карту» и вставьте номер.
+  </div>
+
+  <div class="toast" id="toast">Скопировано в буфер обмена</div>
+
+<script src="locations.js"></script>
+<script>
+  // ============ CONFIGURATION ============
+  const CARD_NUMBER = "1234123412341234";       // ⚠️ Replace with your real card
+  const PRICE_PER_LITER = 500;                  // сум
+  const PAYME_MERCHANT_ID = "";                 // Optional: your Payme merchant id (paycom.uz)
+  // =======================================
+
+  // Locations map (P001 -> name). Edit to add full list.
+  const LOCATIONS = window.LOCATIONS || {};
+
+  // Read ID from URL
+  const params = new URLSearchParams(window.location.search);
+  const pointId = (params.get("id") || "P001").toUpperCase();
+  const pointName = LOCATIONS[pointId] || ("Точка " + pointId.replace(/^P/, ""));
+
+  document.getElementById("point-name").textContent = pointName;
+  document.getElementById("point-id").textContent = "ID: " + pointId;
+
+  // Format card with spaces
+  document.getElementById("card-number").textContent =
+    CARD_NUMBER.replace(/(.{4})/g, "$1 ").trim();
+
+  // Liters controls
+  const litersInput = document.getElementById("liters");
+  const totalEl = document.getElementById("total");
+  function updateTotal() {
+    let n = parseInt(litersInput.value, 10);
+    if (!Number.isFinite(n) || n < 1) n = 1;
+    if (n > 999) n = 999;
+    litersInput.value = n;
+    totalEl.textContent = (n * PRICE_PER_LITER).toLocaleString("ru-RU");
+  }
+  document.getElementById("minus-btn").addEventListener("click", () => {
+    litersInput.value = Math.max(1, parseInt(litersInput.value, 10) - 1);
+    updateTotal();
+  });
+  document.getElementById("plus-btn").addEventListener("click", () => {
+    litersInput.value = Math.min(999, parseInt(litersInput.value, 10) + 1);
+    updateTotal();
+  });
+  litersInput.addEventListener("input", updateTotal);
+  updateTotal();
+
+  // Toast
+  const toast = document.getElementById("toast");
+  let toastTimer = null;
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 2500);
+  }
+
+  // Clipboard
+  async function copyToClipboard(text) {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      return true;
+    } catch (e) { return false; }
+  }
+
+  // Copy card button
+  const copyBtn = document.getElementById("copy-btn");
+  copyBtn.addEventListener("click", async () => {
+    const ok = await copyToClipboard(CARD_NUMBER);
+    if (ok) {
+      copyBtn.classList.add("copied");
+      copyBtn.textContent = "✓ Скопировано";
+      showToast("Номер карты скопирован");
+      setTimeout(() => {
+        copyBtn.classList.remove("copied");
+        copyBtn.textContent = "Копировать";
+      }, 2000);
+    }
+  });
+
+  // Open app helper: try app scheme; fall back to universal link.
+  function openApp(scheme, fallback) {
+    const start = Date.now();
+    // Try scheme
+    const a = document.createElement("a");
+    a.href = scheme;
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    // After short delay, if still here, navigate to fallback
+    setTimeout(() => {
+      if (Date.now() - start < 1800 && document.visibilityState === "visible") {
+        window.location.href = fallback;
+      }
+    }, 800);
+  }
+
+  // Track payment (sent as part of universal link / referrer)
+  function trackUrl(target) {
+    const sep = target.includes("?") ? "&" : "?";
+    return target + sep + "point=" + encodeURIComponent(pointId);
+  }
+
+  // Payme button
+  document.getElementById("payme-btn").addEventListener("click", async () => {
+    await copyToClipboard(CARD_NUMBER);
+    showToast("Карта скопирована — вставьте в Payme");
+    // Payme deep link: open the app's transfer-to-card section
+    const scheme = "payme://transfer?card=" + CARD_NUMBER + "&amount=" + (parseInt(litersInput.value, 10) * PRICE_PER_LITER * 100);
+    const fallback = trackUrl("https://payme.uz/");
+    setTimeout(() => openApp(scheme, fallback), 250);
+  });
+
+  // Click button
+  document.getElementById("click-btn").addEventListener("click", async () => {
+    await copyToClipboard(CARD_NUMBER);
+    showToast("Карта скопирована — вставьте в Click");
+    // Click deep link
+    const scheme = "click://transfer?card=" + CARD_NUMBER + "&amount=" + (parseInt(litersInput.value, 10) * PRICE_PER_LITER);
+    const fallback = trackUrl("https://my.click.uz/");
+    setTimeout(() => openApp(scheme, fallback), 250);
+  });
+</script>
+</body>
+</html>
